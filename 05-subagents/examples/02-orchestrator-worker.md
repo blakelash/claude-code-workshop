@@ -9,9 +9,8 @@
 │  1. Identify all units of work                │
 │  2. Define the worker instructions            │
 │  3. Dispatch workers (parallel or batched)    │
-│  4. Monitor progress                          │
-│  5. Validate worker outputs                   │
-│  6. Aggregate results                         │
+│  4. Collect worker outputs                    │
+│  5. Synthesize across results                 │
 └──────────┬──────────┬──────────┬─────────────┘
            │          │          │
      ┌─────▼───┐ ┌────▼────┐ ┌──▼──────┐
@@ -20,78 +19,82 @@
      │ Fresh    │ │ Fresh   │ │ Fresh   │
      │ context  │ │ context │ │ context │
      │          │ │         │ │         │
-     │ One unit │ │ One unit│ │ One unit│
-     │ of work  │ │ of work │ │ of work │
+     │ READS    │ │ READS   │ │ READS   │
+     │ REASONS  │ │ REASONS │ │ REASONS │
+     │ DECIDES  │ │ DECIDES │ │ DECIDES │
      └─────┬────┘ └────┬────┘ └────┬────┘
            │           │           │
            ▼           ▼           ▼
-        result_1    result_2    result_3
+        output_1    output_2    output_3
            │           │           │
            └───────────┼───────────┘
                        ▼
-              Aggregated results
+               Synthesis / Summary
 ```
 
-## Analogy: Snakemake/Nextflow
+## Key difference from a pipeline
 
-If you've used workflow managers, this is the same idea:
+In a pipeline, each worker runs **the same fixed logic** on different inputs. In the subagent pattern, each worker **reasons independently** — it reads material, makes judgments, and produces an analysis that couldn't be reduced to a deterministic script.
 
-| Workflow Manager | Claude Subagents |
-|-----------------|------------------|
-| Snakefile rule | Worker prompt / skill |
-| Input wildcards | List of samples/files |
-| Independent jobs | Worker agents |
-| Target rule | Orchestrator aggregation |
-| `--cores 8` | Parallel worker dispatch |
+## Worked example: auditing analysis scripts
 
-The key insight: **each job/worker is independent and stateless**. It reads its inputs, does its work, writes its outputs. No shared state between workers.
+**Your prompt to Claude:**
 
-## Pseudocode
+```
+I have 6 analysis scripts in scripts/. Each was written by a different person.
+I need each script reviewed for:
 
-```python
-# The orchestrator's logic (conceptual, not literal code)
+1. Reproducibility: Are random seeds set? Are package versions pinned?
+2. Statistical rigor: Are effect sizes reported? Is multiple testing corrected?
+3. Figure quality: 300 DPI? Colorblind-safe palettes? Axis labels present?
+4. Code quality: Hardcoded paths? Magic numbers? Missing docstrings?
 
-# Step 1: Identify work units
-samples = list_files("data/raw/*.fastq")
+For each script, write a review to reviews/{script_name}_review.md with:
+- A pass/fail for each of the 4 categories
+- Specific line numbers where issues occur
+- Suggested fixes
 
-# Step 2: Define worker instructions
-worker_instructions = """
-Process the following sample through the RNA-seq pipeline:
-- Input: {sample_path}
-- Reference: data/references/GRCh38.fa
-- Parameters: see skills/rnaseq-pipeline/SKILL.md
-- Save results to: results/{sample_name}/
-- Save QC metrics to: results/{sample_name}/qc_metrics.json
-"""
-
-# Step 3: Dispatch workers
-for sample in samples:
-    spawn_worker(worker_instructions.format(
-        sample_path=sample,
-        sample_name=sample.stem
-    ))
-
-# Step 4: Wait for completion, validate outputs
-for sample in samples:
-    result = read(f"results/{sample.stem}/qc_metrics.json")
-    validate(result)  # check expected fields exist, values are reasonable
-
-# Step 5: Aggregate
-all_metrics = collect_results("results/*/qc_metrics.json")
-create_summary_table(all_metrics, "results/qc_summary.csv")
-create_summary_plots(all_metrics, "results/figures/")
+After all reviews are done, write reviews/summary.md ranking the scripts
+from most to least issues, and listing the top 3 most common problems.
 ```
 
-## When to use this pattern
+**What the orchestrator does:**
 
-✅ **Good fit:**
-- 10+ samples through the same pipeline
-- Tasks that are truly independent (no sample depends on another)
-- Processing that fills context if done sequentially
-- When consistency across samples is critical
+1. Lists scripts in `scripts/`
+2. For each script, spawns a worker with:
+   - The script to review
+   - The review criteria (all 4 categories)
+   - The output format specification
+3. Each worker reads its assigned script, understands the analysis logic, checks each criterion, and writes a structured review
+4. Orchestrator reads all `reviews/*_review.md` files
+5. Synthesizes a cross-script summary
 
-❌ **Not a good fit:**
-- Fewer than 5 samples (just do them sequentially)
-- Tasks where each step depends on previous results
-- Exploratory analysis (you need to see results before deciding next steps)
-- When the task fits comfortably in one session
+**Why this needs subagents, not a pipeline:**
+
+You can't write a bash script that determines whether a statistical test is appropriate for the data, or whether a figure's axis labels are meaningful. Each review requires *understanding the code* — that's reasoning.
+
+## Structured output is still important
+
+Even though workers reason independently, the orchestrator needs to aggregate their outputs. Give workers a clear output format:
+
+```markdown
+## Review: {script_name}
+
+### Reproducibility: PASS/FAIL
+- [specific findings]
+
+### Statistical Rigor: PASS/FAIL
+- [specific findings]
+
+### Figure Quality: PASS/FAIL
+- [specific findings]
+
+### Code Quality: PASS/FAIL
+- [specific findings]
+
+### Summary
+- Total issues: N
+- Critical issues: N
+```
+
+This gives the orchestrator a reliable structure to parse when building the cross-script summary.

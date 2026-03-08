@@ -60,6 +60,55 @@ What are the assumptions of this test and are they met?
 
 If Claude can't justify the choice clearly, that's a red flag.
 
+### Ask Claude to check its own work
+
+This is one of the simplest and most effective strategies. After Claude produces an analysis, explicitly ask it to review what it just did:
+
+```
+Now review the code you just wrote. Check for:
+- Off-by-one errors
+- Incorrect groupby/axis operations
+- Whether the statistical test matches what we discussed
+- Whether the filtering thresholds are applied correctly
+```
+
+Or more broadly:
+
+```
+Before I trust these results, play devil's advocate. What could be
+wrong with this analysis? What assumptions might be violated?
+```
+
+Claude is surprisingly good at finding its own mistakes when prompted to look — it just won't do it spontaneously. Make self-review a habit at the end of any analysis block.
+
+### Build reviewing subagents
+
+For recurring review tasks, encode them as subagents that run automatically. Claude Code's subagent system (Module 05) lets you dispatch dedicated reviewers against your code:
+
+```
+Review the script analyze_rnaseq.py. Spin up three subagents in parallel:
+
+1. A stats reviewer: check that statistical methods are appropriate,
+   assumptions are met, effect sizes are reported, and multiple testing
+   correction is applied.
+
+2. A reproducibility reviewer: check for hardcoded paths, missing random
+   seeds, undeclared dependencies, and session-dependent state.
+
+3. A figure reviewer: check that all plots have correct labels, colorblind-safe
+   palettes, sufficient DPI, and accurate legends.
+
+Compile the findings into a single review summary.
+```
+
+This is powerful because each subagent focuses on one dimension of quality, and they run in parallel. You can also save these review patterns as skills (Module 04) so they're always one command away:
+
+```
+/review-analysis analyze_rnaseq.py
+```
+
+The key insight: **don't just use Claude to write code — use Claude to review Claude's code.** A fresh subagent reviewing code has no sunk-cost bias toward defending it.
+
 ### Run code outside of Claude
 
 Copy the final script out and run it independently. If it fails or produces different results, something in the session-dependent state was affecting the analysis.
@@ -72,8 +121,10 @@ Put your statistical conventions in `CLAUDE.md`. Claude will follow them — and
 
 1. Read `examples/silent_error_demo.py` — find the bug before running it
 2. Run it — does the output look wrong? (It won't be obvious)
-3. Read `examples/assumption_drift_transcript.md` — identify where the switch happens
-4. Review `examples/checklist.md` and think about your own work
+3. Ask Claude to review `silent_error_demo.py` — does it catch the bug on its own?
+4. Read `examples/assumption_drift_transcript.md` — identify where the switch happens
+5. Try the subagent review pattern: ask Claude to spin up parallel reviewers (stats, reproducibility, figures) against `silent_error_demo.py` and see what they find
+6. Review `examples/checklist.md` and think about your own work
 
 ## Key lesson
 

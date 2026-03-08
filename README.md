@@ -1,6 +1,6 @@
 # Claude Code for Scientists — Workshop
 
-A hands-on workshop teaching scientists how to use [Claude Code](https://docs.anthropic.com/en/docs/claude-code) as an AI-powered research assistant. Designed for biologists, bioinformaticians, and computational researchers at Fred Hutch and beyond.
+A hands-on workshop teaching scientists how to use [Claude Code](https://docs.anthropic.com/en/docs/claude-code) as an AI-powered research assistant. Designed for biologists, bioinformaticians, and computational researchers. Note we are just scratching the surface here, I am trying to give you a broad overview, but there is so much more we won't cover. 
 
 ## Who this is for
 
@@ -16,7 +16,7 @@ Scientists who write code as part of their research — whether you're analyzing
 | **03** | [Memories & CLAUDE.md](03-memories-and-claude-md/) | 20 min |
 | **04** | [Skills](04-skills/) | 20 min |
 | **05** | [Subagents](05-subagents/) | 15 min |
-| **06** | [Model Selection & Cost](06-model-and-token-cost/) | 5 min |
+| **06** | [Model Selection & Usage](06-model-and-token-usage/) | 5 min |
 | **07** | [Trust & Rigor](07-trust-and-rigor/) | 15 min |
 
 ## Mental model

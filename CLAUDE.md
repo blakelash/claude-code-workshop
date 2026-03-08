@@ -34,6 +34,6 @@ The repo contains teaching materials, example data, and exercises organized by m
 03-memories-and-claude-md/ — persisting conventions across sessions
 04-skills/              — encoding lab SOPs as executable skills
 05-subagents/           — orchestrator/worker patterns for large tasks
-06-model-and-token-cost/ — choosing the right model
+06-model-and-token-usage/ — choosing the right model
 07-trust-and-rigor/     — verification, reproducibility, scientific rigor
 ```
