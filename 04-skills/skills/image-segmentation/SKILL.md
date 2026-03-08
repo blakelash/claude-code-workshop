@@ -1,3 +1,8 @@
+---
+name: cell-segmentation
+description: Run cell segmentation on fluorescence microscopy images using Cellpose. Generates masks and extracts per-cell measurements.
+---
+
 # Skill: Cell Segmentation with Cellpose
 
 ## Context
@@ -73,6 +78,13 @@ Report:
 | Cellpose GPU not available | Fall back to CPU, warn about slower processing |
 | Zero cells in an image | Log as QC flag, include in report |
 | Out of memory | Reduce batch size, process images one at a time |
+
+## Reference files
+
+These are in the same directory as this skill — read them if needed:
+
+- `default_params.json` — default Cellpose parameters for common imaging setups (confocal, widefield, etc.)
+- `channel_conventions.md` — lab-standard channel ordering and naming by stain panel
 
 ## Dependencies
 

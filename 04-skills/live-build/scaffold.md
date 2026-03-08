@@ -1,8 +1,8 @@
-# Skill Scaffold — Build Your Own
-
-Use this template to create a skill for a task you do repeatedly. Fill in each section, then save it as `SKILL.md` in a descriptive directory.
-
 ---
+name: [short-kebab-case-name]
+description: [One sentence — what this skill does and when to use it]
+---
+
 
 # Skill: [Name of your skill]
 
@@ -47,6 +47,15 @@ Use this template to create a skill for a task you do repeatedly. Fill in each s
 | [Common problem 1] | [How to handle it] |
 | [Common problem 2] | [How to handle it] |
 | [Ambiguous situation] | Stop and ask the user |
+
+## Reference files
+
+These are in the same directory as this skill — read them if needed:
+
+- `[example_input.csv]` — [example of what the input data looks like]
+- `[expected_output.csv]` — [example of what correct output looks like]
+- `[template_script.py]` — [starter script with the correct API calls]
+- `[default_params.json]` — [default parameter values for common configurations]
 
 ## Dependencies
 

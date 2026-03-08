@@ -1,3 +1,8 @@
+---
+name: deseq2-workflow
+description: Run a bulk RNA-seq differential expression analysis using pydeseq2. Use when you have a raw count matrix and want to identify DE genes between two conditions.
+---
+
 # Skill: DESeq2 Differential Expression Workflow
 
 ## Context
@@ -69,6 +74,13 @@ Print a summary including:
 | All genes filtered out | Stop — likely a data format issue |
 | DESeq2 convergence warnings | Report the warnings, proceed, note affected genes |
 | No significant DE genes | Report this clearly — it's a valid result, not an error |
+
+## Reference files
+
+These are in the same directory as this skill — read them if needed:
+
+- `template_script.py` — a starter script with the correct pydeseq2 API calls and plot setup
+- `expected_output.csv` — example of what the results CSV should look like (first 5 rows)
 
 ## Dependencies
 

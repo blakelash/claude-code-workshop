@@ -1,5 +1,7 @@
 # Module 03 — Memories & CLAUDE.md
 
+> **Connection to context management:** In Module 02 we saw that every token in context costs attention and money. `CLAUDE.md` is loaded **in full** into context at the start of every session, automatically — it counts against your 200k token limit just like everything else. That's why you want to keep it focused and accurate: it's always there, Claude treats it as ground truth, and bloated instructions eat into your working space. If you have more detailed instructions for Claude on how to do specific things, this does not go here, we will talk about this in the next module. 
+
 ## Two levels of persistent context
 
 Claude Code has two mechanisms for remembering things across sessions:
@@ -21,6 +23,7 @@ Project-specific conventions that apply to **this** project:
 - Statistical defaults
 - File naming conventions
 - Output format requirements
+- **Infrastructure knowledge** — teach Claude how your compute environment works (e.g., SLURM partitions, which queue to use for GPU jobs vs. CPU jobs, module load commands, scratch vs. home directory paths)
 
 ### `/memory` — quick-add memories from a session
 
@@ -99,4 +102,4 @@ This module includes three templates of increasing specificity:
 
 ## Key lesson
 
-**`CLAUDE.md` is free context, loaded every session.** Every convention you encode here is work you'll never re-explain. Build it incrementally — add a new rule every time you catch yourself correcting Claude on the same thing twice.
+**`CLAUDE.md` is loaded every session — it costs tokens but saves time.** Every convention you encode here is work you'll never re-explain. Build it incrementally — add a new rule every time you catch yourself correcting Claude on the same thing twice.

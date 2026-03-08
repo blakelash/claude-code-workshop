@@ -76,7 +76,7 @@ This is an edited transcript showing how Claude's outputs degrade over a long se
 
 ## What should you do here?
 
-At exchange 9-10, this session was ready for a `/clear`. The signs:
+At exchange 9-10, this session was ready for a `/clear or /compact`. The signs:
 
 1. **Imprecise language** — paraphrasing instead of using exact terms
 2. **Convention drift** — forgetting project-level settings from CLAUDE.md

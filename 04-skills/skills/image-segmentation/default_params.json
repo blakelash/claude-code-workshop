@@ -1,0 +1,30 @@
+{
+  "_comment": "Default Cellpose parameters by imaging setup. Select the profile that matches your microscope.",
+
+  "confocal_20x": {
+    "model_type": "cyto3",
+    "diameter": 60,
+    "flow_threshold": 0.4,
+    "cellprob_threshold": 0.0,
+    "channels": [2, 1],
+    "notes": "channel order: [cytoplasm, nucleus]. 20x confocal, ~0.5 µm/px"
+  },
+
+  "widefield_40x": {
+    "model_type": "cyto3",
+    "diameter": 120,
+    "flow_threshold": 0.4,
+    "cellprob_threshold": 0.0,
+    "channels": [2, 1],
+    "notes": "40x widefield, ~0.25 µm/px. Larger diameter due to higher magnification"
+  },
+
+  "nuclear_only": {
+    "model_type": "nuclei",
+    "diameter": 40,
+    "flow_threshold": 0.4,
+    "cellprob_threshold": 0.0,
+    "channels": [0, 0],
+    "notes": "Single-channel DAPI. channels=[0,0] means grayscale input"
+  }
+}

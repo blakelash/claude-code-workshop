@@ -1,0 +1,29 @@
+{
+  "_comment": "Standard column renames for common lab instrument outputs. Keys are messy originals, values are clean names.",
+
+  "plate_reader": {
+    "Well Position": "well",
+    "Sample Name": "sample_name",
+    "Absorbance @ 260nm": "abs_260",
+    "Absorbance @ 280nm": "abs_280",
+    "260/280 Ratio": "ratio_260_280",
+    "Concentration (ng/uL)": "concentration_ng_ul"
+  },
+
+  "nanodrop": {
+    "Sample ID": "sample_id",
+    "Nucleic Acid Conc.": "concentration_ng_ul",
+    "A260": "abs_260",
+    "A280": "abs_280",
+    "260/280": "ratio_260_280",
+    "260/230": "ratio_260_230"
+  },
+
+  "bioanalyzer": {
+    "Sample Description": "sample_name",
+    "RNA Concentration [pg/ul]": "rna_concentration_pg_ul",
+    "RNA Integrity Number (RIN)": "rin",
+    "28S/18S": "ratio_28s_18s",
+    "Result Flagging": "qc_flag"
+  }
+}

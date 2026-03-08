@@ -1,3 +1,8 @@
+---
+name: parse-lab-excel
+description: Parse messy lab Excel files (merged cells, multi-row headers, metadata in margins) into clean, standardized CSV format.
+---
+
 # Skill: Parse Lab Excel Files
 
 ## Context
@@ -60,6 +65,13 @@ Lab instruments and collaborators often provide data in messy Excel files with m
 | Password-protected | Stop, ask user |
 | Multiple data tables on one sheet | Stop, ask user which table to extract |
 | Encoding issues | Try UTF-8, then Latin-1, then report |
+
+## Reference files
+
+These are in the same directory as this skill — read them if needed:
+
+- `column_name_mappings.json` — standard column renames for common instrument outputs (e.g., "Absorbance @ 260nm" → "abs_260")
+- `expected_output.csv` — example of what a correctly parsed CSV should look like
 
 ## Dependencies
 
