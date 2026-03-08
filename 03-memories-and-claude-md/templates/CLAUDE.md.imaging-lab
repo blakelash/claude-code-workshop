@@ -1,0 +1,51 @@
+# CLAUDE.md — Microscopy & Image Analysis Lab
+
+## Project overview
+
+This lab studies cellular morphology and protein localization using fluorescence microscopy, live-cell imaging, and high-content screening. We work with cell lines, primary cultures, and tissue sections.
+
+## Preferred tools
+
+- Language: Python 3.11+ (primary)
+- Image analysis: scikit-image, cellpose, napari, aicsimageio
+- Data analysis: pandas, numpy, scipy, seaborn, matplotlib
+- Deep learning (when needed): PyTorch, torchvision
+- File formats: OME-TIFF (images), CSV (measurements), h5 (large datasets)
+- Environment: conda/mamba
+
+## Data conventions
+
+- Raw images: `data/raw/` — NEVER modify
+- Processed images: `data/processed/`
+- Segmentation masks: `data/masks/`
+- Measurements: `data/measurements/`
+- Image naming: `{date}_{experiment}_{well}_{channel}_{z-slice}.tif`
+- Metadata: always maintain a `metadata.csv` linking image files to experimental conditions
+
+## Analysis conventions
+
+- Segmentation: Cellpose (cyto3 model) unless cell type requires custom model
+- Background subtraction: rolling ball (radius 50px) or median filter as appropriate
+- Intensity measurements: always background-subtract before quantifying
+- Colocalization: Pearson's R and Manders' coefficients, not just visual overlay
+- Statistics: mixed-effects models when measurements come from cells within wells within plates (account for nesting)
+- Minimum 3 biological replicates (independent experiments, not technical replicates)
+- Flag for human review: segmentation quality < 90%, unusual cell counts per well, intensity values at detector saturation
+
+## Output conventions
+
+- Figures: 300 DPI, PDF for publication, PNG for quick inspection
+- Always include a scale bar on microscopy images
+- Show representative images alongside quantification
+- Color: grayscale for single-channel, magenta/green (NOT red/green) for two-channel overlays
+- Lookup tables: specify the LUT used (e.g., "displayed with 'gray' LUT, min=100, max=4000")
+- Z-projections: state the method (max intensity, mean, sum)
+- Default figure size: 10 × 8 inches
+
+## Reproducibility
+
+- Record all processing parameters (thresholds, filter sizes, model parameters)
+- Set random seeds: `random_state=42`
+- Save segmentation masks alongside measurements
+- Use relative paths
+- Log package versions

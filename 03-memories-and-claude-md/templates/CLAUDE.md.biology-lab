@@ -1,0 +1,57 @@
+# CLAUDE.md — Genomics & Molecular Biology Lab
+
+## Project overview
+
+This lab studies gene regulation in neurodevelopment using single-cell and bulk RNA-seq, ATAC-seq, and CUT&Tag. We work primarily with mouse models and human iPSC-derived organoids.
+
+## Preferred tools
+
+- Language: Python 3.11+ (primary), R 4.3+ (for specific Bioconductor packages only)
+- Python packages: scanpy 1.10+, pandas 2.x, numpy, seaborn 0.13+, matplotlib, pydeseq2, scikit-learn, anndata
+- R packages (when needed): DESeq2, clusterProfiler, GenomicRanges
+- Environment manager: conda/mamba with environment.yml files
+- Version control: git, with meaningful commit messages
+
+## Data conventions
+
+- Raw data: `data/raw/` — NEVER modify files here
+- Processed data: `data/processed/`
+- Reference files: `data/references/`
+- Genome build: GRCh38 (human) or GRCm39 (mouse)
+- Gene annotation: Ensembl release 110
+- File naming: `{date}_{descriptor}_{version}.{ext}` (e.g., `2025-03-01_counts_filtered_v2.csv`)
+- AnnData objects: save as `.h5ad` format
+
+## Analysis conventions
+
+- Differential expression: pydeseq2 for bulk RNA-seq, Wilcoxon rank-sum (scanpy) for single-cell
+- Always report: log2 fold change, p-value, adjusted p-value, and mean expression
+- Multiple testing: Benjamini-Hochberg (FDR < 0.05)
+- Minimum 3 biological replicates per condition for any statistical comparison
+- For clustering: Leiden algorithm (not Louvain), test multiple resolutions
+- Dimensionality reduction: PCA first (50 components), then UMAP for visualization
+- Flag for human review: any result with n < 3, any p-value between 0.01 and 0.05, unexpected cell type markers
+
+## Output conventions
+
+- Figures: 300 DPI, PDF for publication, PNG for quick inspection
+- Default figure size: 8 × 6 inches (single panel), 12 × 8 (multi-panel)
+- Color palette: seaborn "colorblind" palette by default; sequential colormaps use "viridis"
+- Never use: rainbow, jet, or red-green colormaps
+- Font size: 12pt for axis labels, 14pt for titles
+- Always include: axis labels with units, descriptive title, legend when >1 group
+- Save figures to `results/figures/` with descriptive names
+
+## Reproducibility
+
+- Always set `random_state=42` for any stochastic method
+- Log package versions at the start of analysis scripts
+- Save intermediate results to disk so analyses can be resumed
+- Use relative paths, never absolute paths
+
+## Code style
+
+- snake_case for variables and functions
+- Docstring at the top of every script: purpose, inputs, outputs
+- No magic numbers — use named constants or comments
+- Prefer explicit over clever — readability matters more than conciseness

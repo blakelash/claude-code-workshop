@@ -1,0 +1,40 @@
+# CLAUDE.md — [Your Project Name]
+
+## Project overview
+
+[One paragraph describing what this project is about]
+
+## Preferred tools
+
+- Language: [Python / R / both]
+- Key packages: [list your go-to packages]
+- Package manager: [pip / conda / mamba]
+
+## Data conventions
+
+- Raw data location: [path]
+- Processed data location: [path]
+- File naming: [your pattern]
+
+## Analysis conventions
+
+- [Your default statistical tests]
+- [Multiple testing correction method]
+- [Minimum sample sizes or other thresholds]
+
+## Output conventions
+
+- Figure size: [default, e.g., 8x6 inches]
+- Figure DPI: [e.g., 300]
+- Color palette: [e.g., colorblind-safe]
+- Figure format: [PNG / PDF / SVG]
+
+## Things to always do
+
+- [e.g., Always set random seeds]
+- [e.g., Always report effect sizes with p-values]
+
+## Things to never do
+
+- [e.g., Never overwrite raw data files]
+- [e.g., Never use rainbow colormaps]
