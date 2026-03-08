@@ -139,6 +139,10 @@ skills/
 
 A new lab member joins. On day one, they have access to the entire lab's accumulated analytical knowledge — executable, version-controlled, and always up to date.
 
+## Community skills for scientists
+
+You don't have to start from zero. The [claude-scientific-skills](https://github.com/K-Dense-AI/claude-scientific-skills) repository is an open collection of ready-made skills for scientific workflows — bioinformatics, data analysis, figure generation, and more. Browse what's there, fork what's useful, and adapt to your lab's conventions.
+
 ## Key lesson
 
 **Skills are how you get compounding returns from Claude Code.** Every SOP you encode is work you'll never re-explain. The lab that builds this well has a permanent advantage.
