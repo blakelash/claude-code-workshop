@@ -1,6 +1,5 @@
 # Module 03 — Memories & CLAUDE.md
 
-> **Connection to context management:** In Module 02 we saw that every token in context costs attention and money. `CLAUDE.md` is loaded **in full** into context at the start of every session, automatically — it counts against your 200k token limit just like everything else. That's why you want to keep it focused and accurate: it's always there, Claude treats it as ground truth, and bloated instructions eat into your working space. If you have more detailed instructions for Claude on how to do specific things, this does not go here, we will talk about this in the next module. 
 
 ## Two levels of persistent context
 
@@ -24,6 +23,8 @@ Project-specific conventions that apply to **this** project:
 - File naming conventions
 - Output format requirements
 - **Infrastructure knowledge** — teach Claude how your compute environment works (e.g., SLURM partitions, which queue to use for GPU jobs vs. CPU jobs, module load commands, scratch vs. home directory paths)
+
+> **Connection to context management:** In Module 02 we saw that every token in context costs attention and money. `CLAUDE.md` is loaded **in full** into context at the start of every session, automatically — it counts against your 200k token limit just like everything else. That's why you want to keep it focused and accurate: it's always there, Claude treats it as ground truth, and bloated instructions eat into your working space. If you have more detailed instructions for Claude on how to do specific things, this does not go here, we will talk about this in the next module. 
 
 ### `/memory` — quick-add memories from a session
 
@@ -64,7 +65,7 @@ Look at `templates/CLAUDE.md.biology-lab` for a full example. Key sections:
 What is this project? One paragraph. Claude needs to know what it's working on.
 
 ### Preferred tools and packages
-Be specific. Not just "use Python" — say "use pandas 2.x, seaborn 0.13+, scanpy 1.10+".
+Be specific. Not just "use Python" — say "use pandas 2.x, seaborn 0.13+, scanpy 1.10+" (or using a package manager like uv with pinned deps in pyproject.toml is even better)
 
 ### Data conventions
 - Where does raw data live? Processed data?

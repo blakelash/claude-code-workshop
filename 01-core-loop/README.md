@@ -20,9 +20,19 @@ claude
 
 ## Walkthrough
 
-### Step 0 — Plan before you execute (`/plan`)
+### Step 0 — Inspect first, ask later
 
-For complex tasks, ask Claude to **plan** before it starts writing code. The `/plan` command puts Claude into planning mode — it will outline an approach and ask for your approval before executing anything.
+Start every analysis by letting Claude look at your data and repo before you ask it to do anything:
+
+```
+Look at the data in data/counts_raw.csv and tell me what you see.
+```
+
+This establishes shared context. Claude will report dimensions, column names, data types, obvious issues — and you'll catch misunderstandings before they compound. Think of it like handing a new rotation student the dataset and asking "what do you notice?" before giving them instructions.
+
+### Step 1 — Plan before you execute (`/plan`)
+
+Now that Claude has seen the data, ask it to **plan** before writing code. The `/plan` command puts Claude into planning mode — it will outline an approach and ask for your approval before executing anything.
 
 ```
 /plan
@@ -35,42 +45,35 @@ I want to do QC on this RNA-seq count matrix, filter low-count genes,
 normalize, and make a PCA plot. What's your approach?
 ```
 
-Claude will outline the steps, you approve or adjust, then it executes. This is the PI/postdoc dynamic in action — you wouldn't let a postdoc run an experiment without discussing the plan first.
+During planning, Claude may ask you clarifying questions — e.g., "What normalization method do you prefer?" or "Should I filter by minimum counts per gene or per sample?" This back-and-forth is the **interview**, and you can proactively ask Claude questions too.
+
+Once the plan is finalized, Claude presents the **execute options**:
+
+```
+Claude has written up a plan and is ready to execute. Would you like to proceed?
+
+ ❯ 1. Yes, clear context (11% used) and auto-accept edits (shift+tab)
+   2. Yes, auto-accept edits
+   3. Yes, manually approve edits
+   4. Type here to tell Claude what to change
+```
+
+- **Option 1 (clear context)** is often the best choice. The plan is saved to a file, so Claude can follow it even after clearing the conversation. This frees up maximum context for the actual execution — especially valuable for multi-step analyses. (More on context in [Module 02](../02-context-management/).)
+- **Option 2** auto-accepts edits but keeps the current context.
+- **Option 3** lets you approve each file edit individually — useful when you want to review closely.
+- **Option 4** lets you push back and refine the plan before any code is written.
 
 **When to use `/plan`:** multi-step analyses, unfamiliar data, anything where the wrong approach wastes significant time. For quick one-off tasks (make a plot, fix this bug), just ask directly.
 
-### Step 1 — Inspect first, ask later
+### Step 2 — Iterate on a plot
 
-Start every analysis by letting Claude look at your data before you ask it to do anything:
-
-```
-Look at the data in data/counts_raw.csv and tell me what you see.
-```
-
-This establishes shared context. Claude will report dimensions, column names, data types, obvious issues — and you'll catch misunderstandings before they compound.
-
-### Step 2 — Ask for QC
-
-```
-Run basic QC on this count matrix:
-- Check for missing values
-- Show the library size distribution across samples
-- Flag any outlier samples (>3 SD from mean library size)
-```
-
-Watch what Claude does. It will write and execute Python code. Check that the code makes sense, that the outputs look right.
-
-### Step 3 — Ask for a visualization
+This is where the core loop shines. Ask Claude for a PCA plot:
 
 ```
 Make a PCA plot of these samples, colored by condition.
 ```
 
-You'll probably get something functional but ugly. That's expected.
-
-### Step 4 — Iterate on the plot
-
-This is where the core loop shines. Instead of re-prompting from scratch:
+You'll probably get something functional but ugly. That's expected — now iterate:
 
 ```
 Good start. Now:
@@ -80,13 +83,13 @@ Good start. Now:
 - Add the variance explained to axis labels
 ```
 
-Then maybe:
+Then keep going:
 
 ```
 Move the legend outside the plot area. Make the title more descriptive.
 ```
 
-Each correction takes seconds. You're steering, not re-driving.
+Each correction takes seconds. You're steering, not re-driving. Notice how each round builds on the previous state — Claude remembers what it did and modifies in place.
 
 ## Key lesson
 
