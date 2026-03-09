@@ -26,15 +26,55 @@ Project-specific conventions that apply to **this** project:
 
 > **Connection to context management:** In Module 02 we saw that every token in context costs attention and money. `CLAUDE.md` is loaded **in full** into context at the start of every session, automatically — it counts against your 200k token limit just like everything else. That's why you want to keep it focused and accurate: it's always there, Claude treats it as ground truth, and bloated instructions eat into your working space. If you have more detailed instructions for Claude on how to do specific things, this does not go here, we will talk about this in the next module. 
 
-### `/memory` — quick-add memories from a session
+### `/memory` — view and edit memory files
 
-You can add to your project or user memory without editing files manually. The `/memory` command lets you save a convention or preference on the fly:
+The `/memory` command shows you all the CLAUDE.md and rules files loaded in your current session. From there you can:
+
+- See which files Claude is actually reading (useful for debugging "why isn't Claude following my rule?")
+- Select any file to open it in your editor
+- Toggle auto memory on or off
 
 ```
-/memory always use log2 fold change, not log10, for DE volcano plots
+/memory
 ```
 
-This appends to your `CLAUDE.md` so it persists across sessions. Useful when you catch yourself correcting Claude — instead of correcting and moving on, correct and `/memory` so it never happens again.
+If you want Claude to remember something, just tell it in conversation:
+
+```
+Remember: always use log2 fold change, not log10, for DE volcano plots
+```
+
+Claude saves this to its auto memory (see below). If you want the instruction in `CLAUDE.md` instead, say so explicitly ("add this to CLAUDE.md") or open the file through `/memory` and edit it yourself.
+
+### 3. Auto memory — Claude takes its own notes
+
+Auto memory lets Claude accumulate knowledge across sessions without you writing anything. As you work, Claude decides what's worth saving — build commands, debugging insights, code style preferences, workflow patterns — and writes notes for itself that persist to future sessions.
+
+**Where it lives:** each project gets a memory directory at `~/.claude/projects/<project>/memory/`, containing:
+
+```
+memory/
+├── MEMORY.md          # Concise index, loaded every session (first 200 lines)
+├── debugging.md       # Detailed notes on debugging patterns
+├── patterns.md        # Code patterns and conventions
+└── ...                # Any other topic files Claude creates
+```
+
+**How it works:**
+- The first 200 lines of `MEMORY.md` are loaded at the start of every conversation
+- Claude keeps `MEMORY.md` concise by moving detailed notes into separate topic files
+- Topic files are read on demand, not loaded at startup
+- Auto memory is machine-local and scoped per git repository
+
+**What gets saved:** Claude doesn't save something every session. It saves things like:
+- Corrections you make ("use this test runner, not that one")
+- Build/run commands it discovers
+- Debugging insights that would help in future sessions
+- Architecture or workflow patterns specific to the project
+
+**Editing auto memory:** everything is plain markdown. You can read, edit, or delete any file at any time. Run `/memory` to browse what Claude has saved.
+
+**Disabling auto memory:** it's on by default. Toggle it via `/memory` or set `"autoMemoryEnabled": false` in your project settings.
 
 ## Why this matters
 
