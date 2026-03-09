@@ -91,6 +91,28 @@ Move the legend outside the plot area. Make the title more descriptive.
 
 Each correction takes seconds. You're steering, not re-driving. Notice how each round builds on the previous state — Claude remembers what it did and modifies in place.
 
+### Aside: `--dangerously-skip-permissions`
+
+Once you're comfortable with the core loop and trust what Claude is doing, the permission prompts can slow you down. For trusted workflows — especially on a local branch with no risk of affecting shared systems — you can skip them entirely:
+
+```bash
+claude --dangerously-skip-permissions
+```
+
+This lets Claude read files, write files, and run shell commands without asking for approval. It's the fastest way to work, but the name is intentionally scary — you're giving Claude full autonomy over your local environment.
+
+**Use this when:**
+- You're iterating on analysis code in a project you can easily reset (e.g., everything is committed)
+- You're working on a local branch and nothing Claude does can affect shared infrastructure
+- You've already gone through a few sessions and understand what Claude typically does
+
+**Don't use this when:**
+- You're working with production data or shared systems
+- You're in a directory with uncommitted work you can't afford to lose
+- You're running Claude for the first time and want to see what it does before granting trust
+
+> **Tip:** You can also set granular permissions with `/permissions` — see [Module 07](../07-trust-and-rigor/) for a deeper discussion of trust strategies.
+
 ## Key lesson
 
 **Resist the urge to write a perfect prompt.** Start rough, inspect the output, correct what's wrong, repeat. Three fast iterations beats one slow attempt at perfection every time.

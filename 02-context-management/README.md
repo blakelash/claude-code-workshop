@@ -148,6 +148,50 @@ Now let's run differential expression analysis.
 
 This works but I would have Claude write this itself
 
+## Picking up where you left off: `-c` and `--resume`
+
+`/clear` and `/compact` manage context *within* a session. But what about *between* sessions — when you close your terminal and come back the next day?
+
+### `claude -c` — continue the last session
+
+```bash
+claude -c
+```
+
+This reopens your most recent conversation with full context intact. If you stopped mid-analysis yesterday, `-c` drops you right back in. Claude remembers everything from that session — files it read, code it ran, decisions you made together.
+
+This is useful when:
+- You got interrupted and want to resume exactly where you were
+- You closed your terminal but the analysis isn't done
+- You want to ask a follow-up question about something Claude did earlier
+
+### `claude --resume` — pick a specific session
+
+```bash
+claude --resume
+```
+
+This shows a list of your recent sessions and lets you select which one to resume. Each entry shows a summary of the conversation, so you can find the right one.
+
+This is useful when:
+- You have multiple ongoing analyses and want to return to a specific one
+- You want to revisit a session from a few days ago to check what was done
+- You ran `-c` but it picked up the wrong session (e.g., you started a quick throwaway session in between)
+
+### When to resume vs. start fresh
+
+Resuming is not always the right move. If the previous session was already at high context usage, resuming puts you right back into that cramped space. Check the tradeoff:
+
+| Situation | Best approach |
+|-----------|--------------|
+| Left mid-task, context was light | `claude -c` to continue |
+| Need to ask one follow-up question | `claude -c` to continue |
+| Previous session was long and sluggish | Start fresh, re-read files from disk |
+| Switching to a different analysis task | Start fresh |
+| Want to verify what a past session did | `claude --resume`, pick the session, review |
+
+**Remember:** Claude's work is always saved to disk. Even if you start fresh instead of resuming, nothing is lost — you just need to point Claude at the files.
+
 ## The discipline: one task per session
 
 The single best habit for context management:
