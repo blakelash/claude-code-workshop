@@ -39,7 +39,7 @@ It's brilliant at executing tasks, tireless, and fast — but it doesn't know yo
 npm install -g @anthropic-ai/claude-code
 
 # Clone this repo
-git clone https://github.com/FredHutch/claude-code-workshop.git
+git clone https://github.com/blakelash/claude-code-workshop.git
 cd claude-code-workshop
 
 # Start Claude Code
