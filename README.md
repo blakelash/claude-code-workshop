@@ -28,21 +28,23 @@ It's brilliant at executing tasks, tireless, and fast — but it doesn't know yo
 ## Prerequisites
 
 - A terminal you're comfortable in (macOS Terminal, iTerm2, Windows Terminal, VS Code terminal)
-- Node.js 18+ installed
-- An Anthropic API key (provided for the workshop) or a Claude Pro/Max subscription
+- A [Claude subscription](https://claude.com/pricing) (Pro, Max, Teams, or Enterprise), [Claude Console](https://console.anthropic.com/) account, or access through a supported cloud provider
 - A code editor (VS Code recommended but not required)
 
 ## Quick start
 
 ```bash
-# Install Claude Code
-npm install -g @anthropic-ai/claude-code
+# Install Claude Code (macOS / Linux)
+curl -fsSL https://claude.ai/install.sh | bash
+
+# Or via Homebrew
+brew install --cask claude-code
 
 # Clone this repo
 git clone https://github.com/blakelash/claude-code-workshop.git
 cd claude-code-workshop
 
-# Start Claude Code
+# Start Claude Code (you'll be prompted to log in on first use)
 claude
 ```
 
