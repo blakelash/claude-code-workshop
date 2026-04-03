@@ -17,8 +17,15 @@ It is **not**:
 ## Installation
 
 ```bash
-# Requires Node.js 18+
-npm install -g @anthropic-ai/claude-code
+# Native installer (recommended)
+curl -fsSL https://claude.ai/install.sh | sh
+```
+
+Claude Code also runs as a **VS Code or JetBrains extension**, a **desktop app** (macOS/Windows), and at **claude.ai/code** in the browser. The CLI is the primary interface for this workshop, but the same skills transfer.
+
+Keep Claude Code up to date:
+```bash
+claude update
 ```
 
 ## Authentication
@@ -87,6 +94,14 @@ Controls what Claude can do without asking you first. By default, Claude will as
 ```
 
 This opens an interactive menu where you can allow or restrict specific tool categories. For this workshop, the defaults are fine — Claude will ask before doing anything potentially destructive.
+
+### `/powerup`
+
+Interactive lessons with animated demos — a quick way to explore Claude Code features hands-on. Good to run once you're set up:
+
+```
+/powerup
+```
 
 > **Tip:** See the `CHEATSHEET.md` in the repo root for a full list of slash commands.
 

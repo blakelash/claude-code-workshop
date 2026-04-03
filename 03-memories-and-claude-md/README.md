@@ -74,7 +74,46 @@ memory/
 
 **Editing auto memory:** everything is plain markdown. You can read, edit, or delete any file at any time. Run `/memory` to browse what Claude has saved.
 
-**Disabling auto memory:** it's on by default. Toggle it via `/memory` or set `"autoMemoryEnabled": false` in your project settings.
+**Disabling auto memory:** it's on by default. Toggle it via `/memory`, set `"autoMemoryEnabled": false` in your project settings, or set `CLAUDE_CODE_DISABLE_AUTO_MEMORY=1` as an environment variable.
+
+**Custom storage location:** set `"autoMemoryDirectory"` in your project settings to store auto memory somewhere other than the default `~/.claude/projects/` path — useful if you want memory to live inside the project repo itself.
+
+## Organizing instructions: `.claude/rules/`
+
+For larger projects, you can split your instructions into topic-specific files in a `.claude/rules/` directory instead of putting everything in one `CLAUDE.md`. Claude loads these alongside `CLAUDE.md`.
+
+```
+.claude/rules/
+├── statistics.md     # statistical defaults
+├── figures.md        # figure conventions
+└── data.md           # data paths and naming
+```
+
+Rules files support **path-specific activation** via frontmatter — a rules file only becomes active when Claude is working with files that match the specified patterns:
+
+```yaml
+---
+paths:
+  - "scripts/imaging/**"
+  - "results/segmentation/**"
+---
+# These instructions only apply when working on imaging scripts
+Use cellpose 3.x for segmentation. Save masks as 16-bit TIFFs.
+```
+
+This keeps heavy, specialized instructions out of context until they're actually needed.
+
+## Importing files into CLAUDE.md
+
+CLAUDE.md supports an `@import` syntax for pulling in other files:
+
+```markdown
+@README.md
+@pyproject.toml
+@docs/lab-conventions.md
+```
+
+This is useful for keeping your CLAUDE.md short while still giving Claude access to a README, package manifest, or shared conventions doc. Imports are resolved up to 5 levels deep.
 
 ## Why this matters
 

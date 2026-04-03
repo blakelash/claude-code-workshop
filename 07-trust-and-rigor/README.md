@@ -109,6 +109,16 @@ This is powerful because each subagent focuses on one dimension of quality, and 
 
 The key insight: **don't just use Claude to write code — use Claude to review Claude's code.** A fresh subagent reviewing code has no sunk-cost bias toward defending it.
 
+### Use extended thinking for genuinely hard problems
+
+For complex statistical decisions — which model to use, how to interpret a surprising result, whether a method's assumptions hold — you can ask Claude to think more deeply by including "ultrathink" in your prompt:
+
+```
+ultrathink: is a negative binomial model appropriate here, given this sample distribution?
+```
+
+This triggers extended reasoning mode where Claude works through the problem more carefully before responding. It's slower and costs more, so save it for situations where you genuinely need deep analysis — not for routine coding tasks.
+
 ### Run code outside of Claude
 
 Copy the final script out and run it independently. If it fails or produces different results, something in the session-dependent state was affecting the analysis.

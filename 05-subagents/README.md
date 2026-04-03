@@ -48,8 +48,11 @@ You can define your own subagents as markdown files in `.claude/agents/` (projec
 ---
 name: stats-reviewer
 description: Reviews analysis scripts for statistical rigor. Use proactively after writing analysis code.
-tools: Read, Grep, Glob
+allowed-tools: Read, Grep, Glob
 model: sonnet
+auto-memory: true
+skills:
+  - deseq2-workflow
 ---
 
 You are a statistical reviewer for scientific code. When invoked, check:
@@ -65,6 +68,12 @@ Organize by priority: critical (invalidates results) vs minor (best practice).
 ```
 
 Claude will automatically delegate to this subagent when it encounters tasks matching the description. You can also invoke it explicitly: *"Use the stats-reviewer subagent on scripts/analysis.py"*
+
+Two useful subagent frontmatter options shown above:
+- **`auto-memory: true`** — the subagent maintains its own auto memory (stored separately from the main session's memory), so it accumulates knowledge about the scripts it reviews over time
+- **`skills:`** — preload specific skills into the subagent's context so it has relevant procedures available without needing to search for them
+
+For parallel or long-running work, you can also set `background: true` and `isolation: "worktree"` in agent calls — the subagent runs in an isolated git worktree so its file changes don't interfere with your main session.
 
 > **Tip**: Use `/agents` in Claude Code to create and manage subagents interactively.
 
@@ -108,6 +117,16 @@ Each worker reads and interprets papers — that's reasoning, not pipeline execu
 2. **Vague worker instructions**: Worker A interprets "check for errors" differently than Worker B → write specific subagent definitions with exact criteria
 3. **Too many workers**: Each worker's results return to your main context. 20 detailed reports will flood it → batch workers or have them write results to disk
 4. **Overkill**: Using subagents for 2-3 items that would take 5 minutes in one session → just do it sequentially
+
+### Running parallel sessions with `--worktree`
+
+For heavy parallel workloads, you can launch separate Claude Code sessions in isolated git worktrees with the `-w` flag:
+
+```bash
+claude -w   # starts in a new worktree
+```
+
+Each worktree gets its own branch. The sessions operate independently and can't accidentally overwrite each other's work. This is the lower-level alternative to agent teams — useful when you want fully independent sessions that you manually coordinate.
 
 ## Agent teams: when workers need to talk to each other
 

@@ -30,6 +30,8 @@ You can check your current context usage at any time:
 
 This shows how much of the 200k window you've used. Get in the habit of checking this when a session feels sluggish — it tells you whether you need to `/compact` or `/clear`.
 
+For a per-turn token breakdown, use `/stats`. This is handy for identifying which specific steps in an analysis are consuming the most context.
+
 ## The context window in practice
 
 Everything Claude can work with in a session lives in this window — a finite buffer that holds:
@@ -177,6 +179,16 @@ This is useful when:
 - You have multiple ongoing analyses and want to return to a specific one
 - You want to revisit a session from a few days ago to check what was done
 - You ran `-c` but it picked up the wrong session (e.g., you started a quick throwaway session in between)
+
+### `claude --resume --fork-session` — resume without modifying the original
+
+If you want to pick up from a previous session but don't want to risk modifying it (e.g., you want to try an alternate approach), add `--fork-session`:
+
+```bash
+claude --resume --fork-session
+```
+
+This creates a new session ID that starts from the same point, leaving the original session intact.
 
 ### When to resume vs. start fresh
 

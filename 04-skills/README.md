@@ -47,6 +47,60 @@ description: Run a bulk RNA-seq DE analysis using pydeseq2. Use when you have a 
 
 **2. The markdown body** (everything below the frontmatter) — loaded **only when the skill is invoked**. This is where the detailed instructions live. This can be as long and specific as you need, because it only enters context when Claude actually needs it.
 
+The frontmatter supports several useful options beyond just `name` and `description`:
+
+| Option | What it does |
+|--------|-------------|
+| `paths:` | Only activate this skill when working with matching files (glob patterns) |
+| `allowed-tools:` | Restrict which tools Claude can use within this skill |
+| `model:` | Override the model for this skill (e.g., always run on Opus) |
+| `effort:` | Override effort level (`low`/`medium`/`high`/`max`) |
+| `context: fork` | Run this skill in a subagent so it doesn't pollute main context |
+| `disable-model-invocation: true` | Claude will never auto-invoke this skill — only you can trigger it |
+
+Example with several options set:
+
+```yaml
+---
+name: deseq2-workflow
+description: Run bulk RNA-seq DE analysis using pydeseq2.
+model: claude-opus-4-6
+effort: high
+context: fork
+paths:
+  - "data/counts/**"
+  - "results/de/**"
+---
+```
+
+### Passing arguments to skills
+
+Skills can accept arguments via `$ARGUMENTS` substitutions:
+
+```
+/deseq2-workflow data/counts_raw.csv KO vs WT
+```
+
+Inside the skill body:
+- `$ARGUMENTS` — all arguments as a string
+- `$1`, `$2`, `$3` — individual positional arguments
+
+```markdown
+Run DE analysis on $1 comparing $2 vs $3.
+```
+
+### Dynamic context injection
+
+Skills can run shell commands at load time and inject the output into the skill body using `` !`command` `` syntax:
+
+```markdown
+## Current project state
+Recent results: !`ls -la results/de/`
+Active git branch: !`git branch --show-current`
+```
+
+This is useful for skills that need live data — for example, a QC skill that automatically reads the current sample manifest before running.
+
 **3. Other files in the skill directory** — **never automatically loaded**. Your `SKILL.md` can reference companion files (example inputs, template scripts, reference configs), but Claude only reads them if it decides it needs to. This gives you a third tier of context: zero cost until Claude actively pulls it in.
 
 ```
@@ -138,6 +192,14 @@ skills/
 ```
 
 A new lab member joins. On day one, they have access to the entire lab's accumulated analytical knowledge — executable, version-controlled, and always up to date.
+
+## Built-in skills worth knowing
+
+Claude Code ships with a few built-in skills that are immediately useful:
+
+**`/simplify`** — reviews all files you've changed in a session for code quality and efficiency. It spawns three parallel review agents and fixes issues it finds. Good to run after a coding-heavy session before committing.
+
+**`/batch <instruction>`** — for large-scale parallel changes across a codebase. Give it a high-level instruction ("add docstrings to all analysis scripts"), and it decomposes the work, spawns agents in isolated git worktrees, and opens PRs automatically. More relevant for software projects than typical analysis scripts, but worth knowing.
 
 ## Community skills for scientists
 

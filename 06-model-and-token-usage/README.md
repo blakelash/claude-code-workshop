@@ -43,9 +43,51 @@ claude --model claude-opus-4-6
 # Or switch mid-session
 /model claude-opus-4-6
 /model claude-sonnet-4-6
+
+# Best of both worlds
+/model opusplan
 ```
 
-## Checking your usage: `/usage`
+## Controlling effort and spend
+
+### `--effort`
+
+Controls how much reasoning Claude applies. Options: `low`, `medium`, `high`, `max` (max is Opus-only).
+
+```bash
+claude --effort high          # more thorough reasoning
+claude --effort low           # faster, lighter responses
+```
+
+Use `low` for quick data wrangling or plot tweaks. Use `high` or `max` when you need deep statistical reasoning or complex debugging.
+
+### `--max-budget-usd`
+
+Caps the maximum API spend for a session — useful for unattended runs or batch scripts where you don't want a runaway task burning through your quota:
+
+```bash
+claude --max-budget-usd 2.00  # stop if session exceeds $2
+```
+
+### `--fallback-model`
+
+Automatically switches to a backup model if the primary is unavailable or overloaded:
+
+```bash
+claude --model claude-opus-4-6 --fallback-model claude-sonnet-4-6
+```
+
+### What is `/model opusplan`?
+
+This is the best-of-both-worlds option. When you use `/model opusplan`, Claude automatically uses **Opus for planning** and then **switches to Sonnet for coding**. You get Opus-level reasoning where it matters most — deciding *what* to do — without burning expensive tokens on the execution.
+
+This is ideal for complex tasks where you want a smart plan but don't need Opus to write every line of code.
+
+```
+/model opusplan
+```
+
+## Checking your usage: `/usage` and `/stats`
 
 Want to know how much a session has used so far? Use `/usage`:
 
@@ -53,7 +95,9 @@ Want to know how much a session has used so far? Use `/usage`:
 /usage
 ```
 
-This shows token usage and estimated usage for the current session. Helpful for building intuition about what uses few vs. many tokens — especially early on when you're calibrating.
+This shows token usage and estimated cost for the current session. Helpful for building intuition about what uses few vs. many tokens — especially early on when you're calibrating.
+
+For a per-turn breakdown, use `/stats` — it shows how many tokens each individual turn consumed, which makes it easier to spot what's eating your context budget.
 
 ## The rule of thumb
 
